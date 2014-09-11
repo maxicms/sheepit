@@ -11,15 +11,15 @@
  *  Gabriel Alonso: Bugfixes
  *
  * @license
- * 
+ *
  * SheepIt is free software: you can redistribute it and/or modify
  * it under the terms of the MIT license
- * 
+ *
  * SheepIt is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * MIT license for more details.
- * 
+ *
  * You should have received a copy of the MIT license
  * along with SheepIt.  If not, see <http://en.wikipedia.org/wiki/MIT_License>.
  */
@@ -53,7 +53,7 @@
             };
 
             return clone;
-            
+
         }
 
         /**
@@ -87,7 +87,7 @@
             if (typeof options.beforeRemoveCurrent === "function") {
                 options.beforeRemoveCurrent(source);
             }
-            
+
             if (options.removeCurrentConfirmation) {
                 if ( confirm(options.removeCurrentConfirmationMsg) ) {
                     removeCurrentForm($(this).data('removableClone'));
@@ -95,7 +95,7 @@
             } else {
                 removeCurrentForm($(this).data('removableClone'));
             }
-            
+
             // After remove current callBack function
             if (typeof options.afterRemoveCurrent === "function") {
                 options.afterRemoveCurrent(source);
@@ -137,14 +137,14 @@
 
 
         }
-        
+
         function getOrSetTemplate(element, attrname){
           var template=element.attr(attrname+"template");
           if(template) {
             return unescape(template);
           }
           var att=element.attr(attrname);
-          // Hide index occurrences inside the template (todo: better escaping method)      
+          // Hide index occurrences inside the template (todo: better escaping method)
           element.attr(attrname+"template", escape(att));
           return att;
         }
@@ -160,17 +160,16 @@
                     ,nameTemplateAttr = getOrSetTemplate(that, "name")
                     ,idAttr = that.attr("id")
                     ,nameAttr = that.attr("name")
-                    
-                /* Normalize field name attributes */
-                newNameAttr = nameTemplateAttr.replace(options.indexFormat, index);
-                that.attr("name", newNameAttr);
 
+                /* Normalize field name attributes */
+                newNameAttr = nameAttr.replace(options.indexFormat, index);
+                that.attr("name", newNameAttr);
                 /* Normalize field id attributes */
-                newIdAttr = idTemplateAttr.replace(options.indexFormat, index);
+                newIdAttr = idAttr.replace(options.indexFormat, index);
 
                 form.find("label[for='"+idAttr+"']").each(function(){
-                        $(this).attr("for", newIdAttr);
-                    });
+                    $(this).attr("for", newIdAttr);
+                });
                 that.attr("id", newIdAttr);
             });
         }
@@ -199,7 +198,7 @@
             // Remove buttons
             if (hasForms()) {
 
-                if (getFormsCount() == 1) {
+                if (getFormsCount() == 0) {
                     removeAll.hideIf();
                     removeLast.showIf();
                 } else {
@@ -263,22 +262,20 @@
         function normalizeForms()
         {
           if(hasForms()){
-              
             noFormsTemplate.hide();
-            
-            if(options.continuousIndex) {
-                
-              var index=0
-                , form=getFirstForm();
-              
-              do{
+
+            if (options.continuousIndex) {
+              var index = 0,
+                  form = getFirstForm();
+
+              do {
                 normalizeForm(form, index);
                 index++;
                 form = getNextForm(form);
-              }while (form!=false)
+              } while (form != false)
             }
-            
-            
+
+
           }else{
             noFormsTemplate.show();
           }
@@ -289,15 +286,14 @@
             if (typeof index == 'undefined') {
                 index=getIndex();
             }
-            
+
             var idTemplate=getOrSetTemplate(form, "id");
 
             // Normalize form id
             if (form.attr("id")) {
                 form.attr("id", idTemplate + index);
             }
-            
-            
+
             // Normalize indexes for fields name and id attributes
             normalizeFieldsForForm(form, index);
 
@@ -311,7 +307,7 @@
                 // Replace all index occurrences inside the html
                 form.html(form.html().replace(re, index));
             }
-            
+
             // Remove current form control
             var removeCurrent = form.find(options.removeCurrentSelector);
             (options.allowRemoveCurrent) ? removeCurrent.show() : removeCurrent.hide();
@@ -330,7 +326,7 @@
 
         /**
          * Add a new form to the collection
-         * 
+         *
          * @parameter normalize: avoid normalize all forms if not necessary
          */
         function addForm(normalizeAllafterAdd, form)
@@ -338,7 +334,7 @@
             if (typeof normalizeAllafterAdd == 'undefined') {
                 normalizeAllafterAdd = true;
             }
-            
+
             if (typeof form == 'undefined') {
                 form = false;
             }
@@ -347,9 +343,9 @@
             if (typeof options.beforeAdd === "function") {
                 options.beforeAdd(source);
             }
-                
+
             var newForm = false;
-            
+
             // Pre-generated form
             if (form) {
                 if ( typeof(form) == 'string' ) {
@@ -360,9 +356,9 @@
                 } else {
                     return false;
                 }
-                
+
                 newForm.remove();
-               
+
             }
             // Cloned Form
             else {
@@ -371,20 +367,20 @@
             }
 
             if (canAddForm() && newForm) {
-                
+
                 newForm = normalizeForm(newForm);
-                
+
 
                 // Remove current control
                 var removeCurrentBtn = newForm.find(options.removeCurrentSelector).first();
 
                 removeCurrentBtn.click(clickOnRemoveCurrent);
                 removeCurrentBtn.data('removableClone', newForm);
-                
-                
+
+
                 // Index
                 newForm.data('formIndex', getIndex());
-                
+
                 // Linked references (separators and forms)
                 newForm.data('previousSeparator',false);
                 newForm.data('nextSeparator',false);
@@ -410,14 +406,14 @@
 
                 }
 
-                (options.insertNewForms == 'after') ? newForm.insertBefore(noFormsTemplate) : newForm.insertAfter(noFormsTemplate);
+                (options.insertNewForms == 'after') ? source.append(newForm) : newForm.insertAfter(noFormsTemplate);
 
                 // Nested forms
                 if (options.nestedForms.length > 0) {
 
                     var x = 0;
                     var nestedForms = [];
-                    
+
                     for(x in options.nestedForms) {
 
                         if (typeof(options.nestedForms[x].id) != 'undefined' && typeof(options.nestedForms[x].options) != 'undefined') {
@@ -425,7 +421,7 @@
                             options.nestedForms[x].parentForm = source;
                             var id = options.nestedForms[x].id.replace(options.indexFormat,newForm.data('formIndex'));
                             var nestedForm = $('#' + id).sheepIt(options.nestedForms[x].options);
-                            
+
                             nestedForms.push(nestedForm);
                         }
                     }
@@ -433,12 +429,12 @@
                 }
 
                 extendForm(newForm);
-                
+
                 forms.push(newForm);
 
                 /**
                  * If index has to be continuous,
-                 * all items are reindexed/renumbered using 
+                 * all items are reindexed/renumbered using
                  * normalizeAll() after add a new form clone
                  */
                 if (normalizeAllafterAdd || options.continuousIndex) {
@@ -451,7 +447,7 @@
                 }
 
                 return true;
-                
+
             } else {
                 return false;
             }
@@ -599,11 +595,11 @@
         function next()
         {
             if (ip !== false) {
-                
+
                 if (forms.length > 1) {
                     var i = 0;
                     var init = parseFloat(ip+1);
-                    
+
                     for (i=init; i<forms.length; i++) {
                         if (forms[i]) {
                             ip = i;
@@ -682,7 +678,7 @@
                 } else {
                     var i = 0;
                     for (i=(forms.length-1); i>=0 ; i--) {
-                        
+
                         if (forms[i]) {
                             ip = i;
                             return true;
@@ -755,7 +751,7 @@
         {
             var x = 0;
             var position = 0;
-            
+
             for (x=0; x<=index; x++) {
                 if (forms[x]) {
                     position++;
@@ -763,7 +759,7 @@
             }
             return position;
         }
-        
+
         /**
          * Get the current index (Forms array length)
          */
@@ -838,7 +834,7 @@
                 return false;
             }
         }
-        
+
         /**
          * Get a form by its position
          */
@@ -865,7 +861,7 @@
         {
             if (hasForms()) {
                first();
-               
+
                var x = 0;
                var activeForms = [];
                for (x=0; x<getFormsCount(); x++) {
@@ -920,7 +916,7 @@
          */
         function fillData(index, values)
         {
-            
+
             var form = '';
 
             // Position
@@ -935,20 +931,20 @@
                 }
 
                 form = getForm(index);
-                
+
                 fillForm(form, values);
-            } 
+            }
             // Form Id
             else if(typeof(index) == 'string') {
-                
+
                 form = $('#'+index);
                 fillForm(form, values);
             }
-            
+
             if (typeof options.afterFill === "function") {
                 options.afterFill(source, form, values);
             }
-                
+
         }
 
         function fillForm(form, data)
@@ -957,7 +953,7 @@
 
             // For each element, try to get the correct field or fields
             $.each(data, function(index, value) {
-                
+
                 var formId = source.attr('id');
                 var formIndex = form.data('formIndex');
 
@@ -970,13 +966,13 @@
                 } else {
                     index = formId + '_' + formIndex + '_' + index;
                 }
-                
-              
+
+
 
                 /**
                  * Search for field (by id, by name, etc)
                  */
-                
+
                 // Search by id
                 var field = form.find(':input[id="' + index + '"]');
 
@@ -989,14 +985,14 @@
                     if (field.length == 0) {
                         // Search by name array format
                         field = form.find(':input[name="' + index + '[]"]');
-                    } 
+                    }
                 }
-                
-                
+
+
 
                 // Field was found
                 if (field.length > 0) {
-					
+
                     // Multiple values?
                     var mv = false;
                     if (typeof(value) == 'object') {
@@ -1012,7 +1008,7 @@
                     if (mf) {
 
                         if (mv) {
-							
+
                             var fieldsToFill = [];
                             fieldsToFill['fields'] = [];
                             fieldsToFill['values'] = [];
@@ -1027,7 +1023,7 @@
                                 fillFormField(fieldsToFill['fields'][x] , fieldsToFill['values'][x]);
                             }
                         } else {
-                            fillFormField( field.filter('[value="'+ value +'"]', value) );
+                            fillFormField( field.filter('[value="'+ value +'"]'), value);
                         }
                     } else {
                         if (mv) {
@@ -1055,9 +1051,9 @@
                         }
                     }
                 }
-                
+
             });
-            
+
 
         }
 
@@ -1111,7 +1107,7 @@
             }
         }
 
-        function setOptions(newOptions) 
+        function setOptions(newOptions)
         {
             options = [];
             options = $.extend(defaults, newOptions);
@@ -1170,7 +1166,7 @@
              */
             templateForm = $(options.formTemplateSelector);
             noFormsTemplate = $(options.noFormsTemplateSelector);
-            
+
             // Get the template for clonning
             template = templateForm.cloneWithAttribut(true);
             templateForm.remove();
@@ -1287,7 +1283,7 @@
                             return false;
                         }
                     },
-                   
+
                     /* ----- Forms ----- */
                     // Get all Forms
                     getForms: function() {
@@ -1300,7 +1296,7 @@
                     getForm: function(val) {
                         if (typeof(val) != 'undefined') {
                             val++;
-                        } 
+                        }
                         return getForm(val);
                     },
                     getLastForm: function() {
@@ -1352,11 +1348,11 @@
 
                     /* ----- Advanced ----- */
                     inject: function(data) {
-                        
+
                         // Loop over each data using a Proxy (function , context)
                         $.each(data, $.proxy( fillData, source ));
                     }
-                    
+
             });
 
         }
@@ -1365,10 +1361,10 @@
          * Extends cloned forms with many useful methods,
          * used to control each form with javascript
          */
-        function extendForm(form) 
+        function extendForm(form)
         {
             // API
-            $.extend( form, {
+            $.extend(form, {
                 setLabel: function(newLabel) {
                      return setLabelForForm(form, newLabel);
                 },
@@ -1431,7 +1427,7 @@
          * Gets the first element of the collection and decorates with jquery
          */
         var source = $(this).first();
-        
+
         // Extend source with useful methods
         extendSource(source);
 
@@ -1451,7 +1447,7 @@
             ip =  false, // Internal ip
             // Default options
             defaults = {
-                
+
                 // Controls selectors
                 addSelector: '#' + $(this).attr("id") + '_add',
                 addNSelector: '#' + $(this).attr("id") + '_add_n',
@@ -1507,7 +1503,7 @@
             afterRemoveCurrent: function(){},
             beforeRemoveCurrent: function(){},
             insertNewForms: 'after',
-            continuousIndex: true //Keep index continuous and starting from 0 
+            continuousIndex: true //Keep index continuous and starting from 0
         };
 
 
