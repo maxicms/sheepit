@@ -2,7 +2,7 @@
  * SheepIt! Jquery Plugin
  * http://www.mdelrosso.com/sheepit/
  *
- * @version 1.1.1
+ * @version 1.1.4
  *
  * Created By Mariano Del Rosso (http://www.mdelrosso.com)
  *
@@ -155,11 +155,9 @@
         function normalizeFieldsForForm(form, index)
         {
             form.find(formFields).each(function(){
-                var that = $(this)
-                    ,idTemplateAttr = getOrSetTemplate(that,"id")
-                    ,nameTemplateAttr = getOrSetTemplate(that, "name")
-                    ,idAttr = that.attr("id")
-                    ,nameAttr = that.attr("name")
+                var that = $(this),
+                    idAttr = that.attr("id"),
+                    nameAttr = that.attr("name");
 
                 /* Normalize field name attributes */
                 newNameAttr = nameAttr.replace(options.indexFormat, index);
@@ -167,7 +165,7 @@
                 /* Normalize field id attributes */
                 newIdAttr = idAttr.replace(options.indexFormat, index);
 
-                form.find("label[for='"+idAttr+"']").each(function(){
+                form.find("label[for='"+idAttr+"']").each(function() {
                     $(this).attr("for", newIdAttr);
                 });
                 that.attr("id", newIdAttr);
@@ -1119,6 +1117,15 @@
             return options;
         }
 
+        function findInSource(selector)
+        {
+            var insource = source.find(selector);
+            if (insource.length) {
+                return insource;
+            }
+            return $(selector);
+        }
+
         function initialize()
         {
             // Hide forms during initialization
@@ -1127,14 +1134,14 @@
             /**
              * Controls
              */
-            add = $(options.addSelector);
-            addN = $(options.addNSelector);
-            addNInput = $(options.addNInputSelector);
-            addNButton = $(options.addNButtonSelector);
-            removeLast = $(options.removeLastSelector);
-            removeCurrent = $(options.removeCurrentSelector);
-            removeAll = $(options.removeAllSelector);
-            controls = $(options.controlsSelector);
+            add           = findInSource(options.addSelector);
+            addN          = findInSource(options.addNSelector);
+            addNInput     = findInSource(options.addNInputSelector);
+            addNButton    = findInSource(options.addNButtonSelector);
+            removeLast    = findInSource(options.removeLastSelector);
+            removeCurrent = findInSource(options.removeCurrentSelector);
+            removeAll     = findInSource(options.removeAllSelector);
+            controls      = findInSource(options.controlsSelector);
 
             if (add.length == 0) {
                 options.allowAdd = false;
@@ -1164,8 +1171,8 @@
             /**
              * Templates
              */
-            templateForm = $(options.formTemplateSelector);
-            noFormsTemplate = $(options.noFormsTemplateSelector);
+            templateForm    = findInSource(options.formTemplateSelector);
+            noFormsTemplate = findInSource(options.noFormsTemplateSelector);
 
             // Get the template for clonning
             template = templateForm.cloneWithAttribut(true);
@@ -1178,8 +1185,7 @@
 
             // Pregenerated forms
             if (options.pregeneratedForms.length > 0) {
-                x = 0;
-                for(x in options.pregeneratedForms) {
+                for (x = 0; x < options.pregeneratedForms.length; x++) {
                     addForm(false,options.pregeneratedForms[x]);
                 }
             }
