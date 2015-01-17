@@ -1487,32 +1487,32 @@
                 // jQuery selector to run normalization on
                 formFields: "input, checkbox, select, textarea",
 
-            // Limits
-            iniFormsCount: 1,
-            maxFormsCount: 20, // 0 = no limit
-            minFormsCount: 1,
-            incrementCount: 1 , // add N forms at one time
-            noFormsMsg: 'No forms to display',
+                // Limits
+                iniFormsCount: 1,
+                maxFormsCount: 20, // 0 = no limit
+                minFormsCount: 1,
+                incrementCount: 1 , // add N forms at one time
+                noFormsMsg: 'No forms to display',
 
-            // Id and names management
-            indexFormat:'#index#',
+                // Id and names management
+                indexFormat:'#index#',
 
-            // Advanced options
-            data: [], // A JSON based representation of the data which will prefill the form (equivalent of the inject method)
-            pregeneratedForms: [],
-            nestedForms: [],
-            isNestedForm: false,
-            parentForm: {},
-            beforeClone: function() {},
-            afterClone: function() {},
-            beforeAdd: function() {},
-            afterAdd: function() {},
-            afterFill: function() {},
-            afterRemoveCurrent: function(){},
-            beforeRemoveCurrent: function(){},
-            insertNewForms: 'after',
-            continuousIndex: true //Keep index continuous and starting from 0
-        };
+                // Advanced options
+                data: [], // A JSON based representation of the data which will prefill the form (equivalent of the inject method)
+                pregeneratedForms: [],
+                nestedForms: [],
+                isNestedForm: false,
+                parentForm: {},
+                beforeClone: function() {},
+                afterClone: function() {},
+                beforeAdd: function() {},
+                afterAdd: function() {},
+                afterFill: function() {},
+                afterRemoveCurrent: function(){},
+                beforeRemoveCurrent: function(){},
+                insertNewForms: 'after',
+                continuousIndex: true //Keep index continuous and starting from 0
+            };
 
 
         setOptions(options);
