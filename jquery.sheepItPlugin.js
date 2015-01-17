@@ -2,7 +2,7 @@
  * SheepIt! Jquery Plugin
  * http://www.mdelrosso.com/sheepit/
  *
- * @version 1.1.4
+ * @version pupi1985-1.1.5
  *
  * Created By Mariano Del Rosso (http://www.mdelrosso.com)
  *
@@ -154,7 +154,7 @@
          */
         function normalizeFieldsForForm(form, index)
         {
-            form.find(formFields).each(function(){
+            form.find(options.formFields).each(function(){
                 var that = $(this),
                     idAttr = that.attr("id"),
                     nameAttr = that.attr("name");
@@ -1448,7 +1448,6 @@
             template,
             templateForm,
             noFormsTemplate,
-            formFields = "input, checkbox, select, textarea",
             forms = [],
             ip =  false, // Internal ip
             // Default options
@@ -1484,6 +1483,9 @@
                 formTemplateSelector: '#' + $(this).attr("id") + '_template',
                 noFormsTemplateSelector: '#' + $(this).attr("id") + '_noforms_template',
                 separator: '<div style="width:100%; border-top:1px solid #ff0000; margin: 10px 0px;"></div>',
+
+                // jQuery selector to run normalization on
+                formFields: "input, checkbox, select, textarea",
 
             // Limits
             iniFormsCount: 1,
